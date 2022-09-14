@@ -7,20 +7,22 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.coursework.DatabaseHelper;
 import com.example.coursework.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddTripActivity extends AppCompatActivity {
 
-    EditText name_input, destination_input, date_of_trip_input, description_input;
+    TextInputLayout name_container, destination_container, date_of_trip_container, description_container;
+    TextInputEditText name_input, destination_input, date_of_trip_input, description_input;
     String name_text, destination_txt, date_of_trip_txt, require_assessment_txt, description_txt;
     RadioGroup require_assessment_group;
     RadioButton require_input_radio;
@@ -42,6 +44,12 @@ public class AddTripActivity extends AppCompatActivity {
                 require_input_radio = (RadioButton) findViewById(require_assessment_group.getCheckedRadioButtonId());
             }
         });
+        // Get reference Text input layout
+        name_container = findViewById(R.id.nameContainer);
+        destination_container = findViewById(R.id.destinationContainer);
+        date_of_trip_container = findViewById(R.id.dateOfTripContainer);
+        date_of_trip_container = findViewById(R.id.dateOfTripContainer);
+        description_container = findViewById(R.id.descriptionContainer);
 
         // Reference save trip button
         save_trip_button = findViewById(R.id.save_trip_button);
@@ -67,22 +75,22 @@ public class AddTripActivity extends AppCompatActivity {
     // Get input from user
     private void getInputs() {
         // Get name input text
-        name_input = findViewById(R.id.name_input);
+        name_input = findViewById(R.id.nameEditText);
         name_text = name_input.getText().toString().trim();
 
         // Get destination input text
-        destination_input = findViewById(R.id.destination_input);
+        destination_input = findViewById(R.id.destinationEditText);
         destination_txt = destination_input.getText().toString().trim();
 
         // Get date of the trim input text
-        date_of_trip_input = findViewById(R.id.date_of_trip_input);
+        date_of_trip_input = findViewById(R.id.dateOfTripEditText);
         date_of_trip_txt = date_of_trip_input.getText().toString().trim();
 
         // Get require assessment text value
         require_assessment_txt = require_input_radio.getText().toString();
 
         // Get destination input text
-        description_input = findViewById(R.id.description_input);
+        description_input = findViewById(R.id.descriptionEditText);
         description_txt = description_input.getText().toString().trim();
     }
 
@@ -115,19 +123,51 @@ public class AddTripActivity extends AppCompatActivity {
     }
 
     private boolean checkValidateInputs() {
-        if (name_text.isEmpty() || destination_txt.isEmpty() || date_of_trip_txt.isEmpty() || require_assessment_txt.isEmpty() || description_txt.isEmpty()) {
-            return false;
+        boolean isValid = true; // Flag status for validate
+
+        // Validate name input
+        if (name_text.isEmpty()) {
+            name_container.setHelperText("Required");
+            isValid = false;
+        } else {
+            name_container.setHelperText("");
         }
 
-        Pattern pattern = Pattern.compile("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$");
+        // Validate destination input
+        if (destination_txt.isEmpty()) {
+            destination_container.setHelperText("Required");
+            isValid = false;
+        } else {
+            destination_container.setHelperText("");
+        }
+
+        // Validate a format is dd/mm/yyyy
+        Pattern pattern = Pattern.compile("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"); // https://www.regextester.com/99555
         Matcher matcher = pattern.matcher(date_of_trip_txt);
         boolean matchFound = matcher.find();
 
         if (!matchFound) {
-            Toast.makeText(this, "Date of the trip input is invalid!", Toast.LENGTH_SHORT).show();
-            return false;
+            date_of_trip_container.setHelperText("Date is invalid!");
+            isValid = false;
+        } else {
+            date_of_trip_container.setHelperText("");
         }
 
-        return true;
+        // Validate date is empty
+        if (date_of_trip_txt.isEmpty()) {
+            date_of_trip_container.setHelperText("Required");
+            isValid = false;
+        } else {
+            date_of_trip_container.setHelperText("");
+        }
+
+        // Validate description text
+        if (description_txt.isEmpty()) {
+            description_container.setHelperText("Required");
+        } else {
+            date_of_trip_container.setHelperText("");
+        }
+
+        return isValid;
     }
 }
