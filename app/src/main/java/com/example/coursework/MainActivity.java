@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.coursework.Trips.AddTripActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button add_trip = findViewById(R.id.add_trip);
-        add_trip.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton add_trip_button = findViewById(R.id.add_trip_button);
+        add_trip_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddTripActivity.class);
