@@ -10,8 +10,9 @@
         <entry key="app/src/main/res/layout/activity_add_trip.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.4036458333333333" />
-        <entry key="app/src/main/res/layout/fragment_trip.xml" value="0.2645161290322581" />
+        <entry key="app/src/main/res/layout/fragment_trip.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_upload.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/trip_data_row.xml" value="0.67" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.40260416666666665" />
       </map>
     </option>
