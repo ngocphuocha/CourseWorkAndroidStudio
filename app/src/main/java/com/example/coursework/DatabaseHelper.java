@@ -2,6 +2,7 @@ package com.example.coursework;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -89,5 +90,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(DESCRIPTION_COLUMN, description);
 
         return db.insertOrThrow(TRIPS_TABLE, null, cv);
+    }
+
+    Cursor getAllTrips() {
+        String query = "SELECT * FROM " + TRIPS_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+
+        return cursor;
     }
 }
