@@ -16,6 +16,8 @@
         <entry key="app/src/main/res/layout/fragment_upload.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/trip_data_row.xml" value="0.67" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.40260416666666665" />
+        <entry key="app/src/main/res/menu/top_menu.xml" value="0.30885416666666665" />
+        <entry key="app/src/main/res/menu/update_trip_activity_top_menu.xml" value="0.3098958333333333" />
       </map>
     </option>
   </component>
