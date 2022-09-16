@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -28,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TYPE_COLUMN = "Type";
     private static final String AMOUNT_COLUMN = "Amount";
     private static final String TIME_OF_EXPENSE = "TIME_OF_EXPENSE";
+
     //Trips table create string
     private static final String CREATE_TRIPS_TABLE = String.format(
             "CREATE TABLE %s (" +
@@ -82,6 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public long addTrip(String name, String destination, String dateOfTrip, String requireRisk, String description) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+
         // Insert row value
         cv.put(NAME_COLUMN, name);
         cv.put(DESTINATION_COLUMN, destination);
@@ -103,5 +106,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return cursor;
+    }
+
+    public void updateTrip(String id, String name, String destination, String date, String requireAssessment, String description) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        //Insert row value
+        cv.put(NAME_COLUMN, name);
+        cv.put(DESTINATION_COLUMN, destination);
+        cv.put(DATE_OF_TRIP_COLUMN, date);
+        cv.put(REQUIRE_ASSESSMENT_COLUMN, requireAssessment);
+        cv.put(DESCRIPTION_COLUMN, description);
+
+        long result = db.update(TRIPS_TABLE, cv, "Id=?", new String[]{id});
+
+        if (result == -1) {
+            Toast.makeText(context, "Failed to update.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Successfully updated! ", Toast.LENGTH_SHORT).show();
+        }
     }
 }

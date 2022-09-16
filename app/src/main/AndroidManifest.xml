@@ -14,9 +14,14 @@
         android:theme="@style/Theme.CourseWork"
         tools:targetApi="31">
         <activity
-            android:name=".Trips.AddTripActivity"
-            android:label="Add New Trip"
+            android:name=".Trips.UpdateTripActivity"
+            android:parentActivityName=".MainActivity"
             android:exported="false" />
+        <activity
+            android:name=".Trips.AddTripActivity"
+            android:parentActivityName=".MainActivity"
+            android:exported="false"
+            android:label="Add New Trip" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

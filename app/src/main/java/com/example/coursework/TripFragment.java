@@ -30,7 +30,7 @@ public class TripFragment extends Fragment {
     FloatingActionButton add_trip_button;
 
     DatabaseHelper db;
-    ArrayList<String> idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray;
+    ArrayList<String> idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray, descriptionArray;
     CustomTripAdapter customTripAdapter;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -101,11 +101,12 @@ public class TripFragment extends Fragment {
         destinationArray = new ArrayList<>();
         dateOfTripArray = new ArrayList<>();
         requireAssessmentArray = new ArrayList<>();
+        descriptionArray = new ArrayList<>();
 
         // Store data in array first for pass to the custom trip adapter
         storeTripsDataInArrays();
 
-        customTripAdapter = new CustomTripAdapter(getActivity(), idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray);
+        customTripAdapter = new CustomTripAdapter(getContext(), idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray, descriptionArray);
         recyclerView.setAdapter(customTripAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -122,7 +123,9 @@ public class TripFragment extends Fragment {
                 destinationArray.add(cursor.getString(2));
                 dateOfTripArray.add(cursor.getString(3));
                 requireAssessmentArray.add(cursor.getString(4));
+                descriptionArray.add(cursor.getString(5));
             }
         }
     }
+
 }

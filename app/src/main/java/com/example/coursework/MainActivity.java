@@ -1,5 +1,6 @@
 package com.example.coursework;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,9 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.coursework.Trips.AddTripActivity;
 import com.example.coursework.databinding.ActivityMainBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -26,16 +25,6 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         // Content view for our layout.
         setContentView(view);
-
-
-//        FloatingActionButton add_trip_button = findViewById(R.id.add_trip_button);
-//        add_trip_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, AddTripActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         // start default trip fragment
         replaceFragment(new TripFragment());
@@ -62,5 +51,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            recreate();
+        }
     }
 }
