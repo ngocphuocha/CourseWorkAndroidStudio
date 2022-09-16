@@ -6,6 +6,8 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.255" />
         <entry key="app/src/main/res/drawable/ic_cloud_upload.xml" value="0.3885" />
+        <entry key="app/src/main/res/drawable/ic_delete.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_delete_sweep.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.3885" />
         <entry key="app/src/main/res/layout/activity_add_trip.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
@@ -17,6 +19,7 @@
         <entry key="app/src/main/res/layout/trip_data_row.xml" value="0.67" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/menu/top_menu.xml" value="0.30885416666666665" />
+        <entry key="app/src/main/res/menu/trip_fragment_top_menu.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/update_trip_activity_top_menu.xml" value="0.3098958333333333" />
       </map>
     </option>
