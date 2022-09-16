@@ -1,23 +1,20 @@
 package com.example.coursework;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coursework.Trips.AddTripActivity;
@@ -32,6 +29,8 @@ import java.util.ArrayList;
  */
 public class TripFragment extends Fragment {
     RecyclerView recyclerView;
+    ImageView emptyImageView;
+    TextView noTripDataTxt;
     FloatingActionButton add_trip_button;
 
     DatabaseHelper db;
@@ -92,7 +91,12 @@ public class TripFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Get reference recycler view
         recyclerView = getView().findViewById(R.id.tripRecyclerView);
+
+        emptyImageView = getView().findViewById(R.id.emptyTripImageView);
+        noTripDataTxt = getView().findViewById(R.id.noTripDataTxt);
+
         add_trip_button = getView().findViewById(R.id.add_trip_button);
         add_trip_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +105,11 @@ public class TripFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        // Set title of bar
         getActivity().setTitle("My Trips");
+
+        // Initial object
         db = new DatabaseHelper(getContext());
         idArray = new ArrayList<>();
         nameArray = new ArrayList<>();
@@ -122,6 +130,8 @@ public class TripFragment extends Fragment {
         Cursor cursor = db.getAllTrips();
 
         if (cursor.getCount() == 0) {
+            emptyImageView.setVisibility(View.VISIBLE);
+            noTripDataTxt.setVisibility(View.VISIBLE);
             Toast.makeText(getContext(), "No data.", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
@@ -132,6 +142,8 @@ public class TripFragment extends Fragment {
                 requireAssessmentArray.add(cursor.getString(4));
                 descriptionArray.add(cursor.getString(5));
             }
+            emptyImageView.setVisibility(View.GONE);
+            noTripDataTxt.setVisibility(View.GONE);
         }
     }
 }

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +22,8 @@ public class CustomTripAdapter extends RecyclerView.Adapter<CustomTripAdapter.My
     Activity activity;
     Context context;
     ArrayList trip_id, trip_name, trip_destination, trip_date_of_trip, trip_require_assessment, trip_description;
+
+    Animation translateAnimation;
 
     //Constructor
     CustomTripAdapter(
@@ -94,6 +98,9 @@ public class CustomTripAdapter extends RecyclerView.Adapter<CustomTripAdapter.My
             trip_require_txt = itemView.findViewById(R.id.trip_require_txt);
             // Get reference linear layout
             tripLinearLayout = itemView.findViewById(R.id.tripLinearLayout);
+            // Animation recycler view
+            translateAnimation = AnimationUtils.loadAnimation(context,R.anim.translate_anim);
+            tripLinearLayout.setAnimation(translateAnimation);
         }
     }
 }
