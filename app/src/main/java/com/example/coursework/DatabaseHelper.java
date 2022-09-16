@@ -131,12 +131,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteTripRow(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        // Delete all the expenses belong to the trip
+        db.delete(EXPENSES_TABLE, "TripId=?", new String[]{id});
         long result = db.delete(TRIPS_TABLE, "Id=?", new String[]{id});
 
-        if(result == -1) {
+        if (result == -1) {
             Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(context, "Delete successfully.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void deleteAllTrip() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete all records from expenses table first
+        db.execSQL("DELETE FROM " + EXPENSES_TABLE);
+        // Then delete trips table records
+        db.execSQL("DELETE FROM " + TRIPS_TABLE);
     }
 }
