@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +13,10 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import com.example.coursework.DatabaseHelper;
 import com.example.coursework.MainActivity;
 import com.example.coursework.R;
 import com.example.coursework.databinding.ActivityUpdateTripBinding;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -117,7 +113,6 @@ public class UpdateTripActivity extends AppCompatActivity {
             Toast.makeText(this, "No data intent.", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private void nameFocusListener() {
         binding.nameEditTextUpdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {

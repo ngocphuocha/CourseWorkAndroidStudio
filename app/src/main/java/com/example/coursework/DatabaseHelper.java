@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.jar.Attributes;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "travelManager.db";
     private static final int DATABASE_VERSION = 1;
@@ -148,5 +150,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + EXPENSES_TABLE);
         // Then delete trips table records
         db.execSQL("DELETE FROM " + TRIPS_TABLE);
+    }
+
+    public Cursor searchTrip(String queryString) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        cursor = db.rawQuery("SELECT * FROM Trips WHERE Name LIKE '%" + queryString + "%'", null);
+        return cursor;
     }
 }
