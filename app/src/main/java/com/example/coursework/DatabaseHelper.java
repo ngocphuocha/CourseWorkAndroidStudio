@@ -158,4 +158,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor = db.rawQuery("SELECT * FROM Trips WHERE Name LIKE '%" + queryString + "%'", null);
         return cursor;
     }
+
+
+    // Expression
+    public long addExpression(String tripId, String type, String amount, String time) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(TRIP_ID_COLUMN, tripId);
+        cv.put(TYPE_COLUMN, type);
+        cv.put(AMOUNT_COLUMN, amount);
+        cv.put(TIME_OF_EXPENSE, time);
+
+        return db.insert(EXPENSES_TABLE, null, cv);
+    }
 }

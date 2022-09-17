@@ -14,14 +14,21 @@
         android:theme="@style/Theme.CourseWork"
         tools:targetApi="31">
         <activity
-            android:name=".Trips.UpdateTripActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".Expressions.AddExpressionActivity"
             android:exported="false" />
         <activity
-            android:name=".Trips.AddTripActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".Expressions.ExpressionActivity"
             android:exported="false"
-            android:label="Add New Trip" />
+            android:parentActivityName=".Trips.UpdateTripActivity" />
+        <activity
+            android:name=".Trips.UpdateTripActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Trips.AddTripActivity"
+            android:exported="false"
+            android:label="Add New Trip"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

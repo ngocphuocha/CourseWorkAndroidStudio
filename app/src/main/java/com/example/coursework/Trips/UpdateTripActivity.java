@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,18 +14,21 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
 import com.example.coursework.DatabaseHelper;
+import com.example.coursework.Expressions.ExpressionActivity;
 import com.example.coursework.MainActivity;
 import com.example.coursework.R;
 import com.example.coursework.databinding.ActivityUpdateTripBinding;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UpdateTripActivity extends AppCompatActivity {
-    ActivityUpdateTripBinding binding;
-    RadioButton require_input_radio;
-    String id, nameText, destinationText, dateOfTripText, requireAssessmentText, descriptionText;
-    boolean isValid = true;
+    private ActivityUpdateTripBinding binding;
+    private RadioButton require_input_radio;
+    private String id, nameText, destinationText, dateOfTripText, requireAssessmentText, descriptionText;
+    private boolean isValid = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,16 @@ public class UpdateTripActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 submitForm();
+            }
+        });
+
+        // Expression activity
+        binding.expressionButtonActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ExpressionActivity.class);
+                intent.putExtra("tripId", id);
+                startActivity(intent);
             }
         });
     }
@@ -224,7 +238,6 @@ public class UpdateTripActivity extends AppCompatActivity {
             isValid = false;
         }
         if (!matchFound) {
-
             isValid = true;
         }
 
