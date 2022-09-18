@@ -172,4 +172,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return db.insert(EXPENSES_TABLE, null, cv);
     }
+
+    public Cursor getAllExpressions(String tripId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+
+        if (db != null) {
+            cursor = db.rawQuery("SELECT * FROM " + EXPENSES_TABLE + " WHERE TripId=?", new String[]{tripId});
+        }
+
+        return cursor;
+    }
 }
