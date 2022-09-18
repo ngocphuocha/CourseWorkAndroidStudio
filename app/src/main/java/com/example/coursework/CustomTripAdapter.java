@@ -99,7 +99,7 @@ public class CustomTripAdapter extends RecyclerView.Adapter<CustomTripAdapter.My
             // Get reference linear layout
             tripLinearLayout = itemView.findViewById(R.id.tripLinearLayout);
             // Animation recycler view
-            translateAnimation = AnimationUtils.loadAnimation(context,R.anim.translate_anim);
+            translateAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
             tripLinearLayout.setAnimation(translateAnimation);
         }
     }

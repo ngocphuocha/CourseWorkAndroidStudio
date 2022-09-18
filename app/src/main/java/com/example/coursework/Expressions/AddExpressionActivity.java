@@ -2,6 +2,8 @@ package com.example.coursework.Expressions;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,12 +17,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddExpressionActivity extends AppCompatActivity {
+    private Activity activity;
     private ActivityAddExpressionBinding binding;
     private boolean isValid = true;
     private final String[] typeExpression = {
-            "Summer Vacation",
-            "New Year",
-            "Tet Holiday"
+            "Travel",
+            "Food",
+            "Transport"
     };
     private String tripId, typeText, amountText, timeText;
 
@@ -37,7 +40,7 @@ public class AddExpressionActivity extends AppCompatActivity {
 
         // Get reference spinner
         Spinner typeSpinner = binding.typeExpressionSpinner;
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeExpression);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, typeExpression);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         typeSpinner.setAdapter(dataAdapter);
 
@@ -63,6 +66,7 @@ public class AddExpressionActivity extends AppCompatActivity {
         });
     }
 
+    // Add new expression by trip id from Intent
     private void addExpressions() {
         if (!checkIsValid()) {
             Toast.makeText(this, "Please fulfill again!", Toast.LENGTH_SHORT).show();
@@ -74,7 +78,10 @@ public class AddExpressionActivity extends AppCompatActivity {
             if (result == -1) {
                 Toast.makeText(this, "Failed to create new expression", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Create Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Create Expression Successfully!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AddExpressionActivity.this, ExpressionActivity.class);
+                intent.putExtra("tripId", tripId);
+                startActivityForResult(intent, 999);
             }
         }
 
@@ -86,6 +93,14 @@ public class AddExpressionActivity extends AppCompatActivity {
         amountText = binding.amountInput.getText().toString();
 
         if (amountText.isEmpty()) {
+            isValid = false;
+        }
+
+        Pattern amountPattern = Pattern.compile("[1-9]"); // Input is only number and not start with 0
+        Matcher matcher1 = amountPattern.matcher(amountText);
+        boolean matchFound1 = matcher1.find(); // Check if match pattern
+
+        if (!matchFound1) {
             isValid = false;
         }
 
@@ -121,9 +136,14 @@ public class AddExpressionActivity extends AppCompatActivity {
 
     private String validAmount() {
         amountText = binding.amountInput.getText().toString();
+        Pattern amountPattern = Pattern.compile("[1-9]"); // Input is only number and not start with 0
+        Matcher matcher1 = amountPattern.matcher(amountText);
+        boolean matchFound1 = matcher1.find(); // Check if match pattern
 
         if (amountText.isEmpty()) {
             return "Required";
+        } else if (!matchFound1) {
+            return "Amount is invalid, not start with 0";
         } else {
             return "";
         }
