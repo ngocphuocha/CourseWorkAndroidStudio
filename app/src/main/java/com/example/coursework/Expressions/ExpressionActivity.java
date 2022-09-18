@@ -99,8 +99,9 @@ public class ExpressionActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 999) {
+        if (requestCode == 999) { // if request code = 999
             if (getIntent().hasExtra("tripId")) {
+                // get and set intent data
                 tripId = getIntent().getStringExtra("tripId");
                 recreate();
             }
