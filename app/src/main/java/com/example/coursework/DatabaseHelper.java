@@ -48,10 +48,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE %s (" +
                     "%s INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "%s INTEGER NOT NULL," +
-//                    "FOREIGN KEY (TripId) REFERENCES Trips (id)," +
                     "%s TEXT NOT NULL," +
                     "%s TEXT NOT NULL," +
-                    "%s TEXT NOT NULL);",
+                    "%s TEXT NOT NULL," +
+                    "FOREIGN KEY(TripId) REFERENCES Trips(" + ID_COLUMN + "));",
             EXPENSES_TABLE, ID_COLUMN, TRIP_ID_COLUMN, TYPE_COLUMN, AMOUNT_COLUMN, TIME_OF_EXPENSE
     );
 
