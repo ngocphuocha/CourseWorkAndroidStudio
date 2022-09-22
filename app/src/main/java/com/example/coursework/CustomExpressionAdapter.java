@@ -65,8 +65,10 @@ public class CustomExpressionAdapter extends RecyclerView.Adapter<CustomExpressi
             typeText = itemView.findViewById(R.id.expressionTypeTxt);
             amountText = itemView.findViewById(R.id.amountExpressionTxt);
             timeText = itemView.findViewById(R.id.timeExpressionTxt);
+
             // Get reference linear layout
             expressionLinearLayout = itemView.findViewById(R.id.expresonLinearLayout);
+
             // Animation recycle view
             translateAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
             expressionLinearLayout.setAnimation(translateAnimation);

@@ -8,7 +8,7 @@
     tools:context=".Expressions.AddExpressionActivity">
 
     <Spinner
-        android:id="@+id/typeExpressionSpinner"
+        android:id="@+id/type_expression_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -17,19 +17,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/amountTextContainer"
+        android:id="@+id/amount_text_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        app:endIconMode="clear_text"
         app:helperText="@string/required"
         app:helperTextTextColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/typeExpressionSpinner">
+        app:layout_constraintTop_toBottomOf="@id/type_expression_spinner">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/amountInput"
+            android:id="@+id/amount_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Amount"
@@ -37,19 +38,20 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/timeExpressionTextContainer"
+        android:id="@+id/time_text_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        app:endIconMode="clear_text"
         app:helperText="@string/required"
         app:helperTextTextColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/amountTextContainer">
+        app:layout_constraintTop_toBottomOf="@id/amount_text_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/timeExpressionInput"
+            android:id="@+id/time_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Time of the expression(DD/MM/YYYY)" />
@@ -63,7 +65,7 @@
         android:text="Add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeExpressionTextContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/time_text_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

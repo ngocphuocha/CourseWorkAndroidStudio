@@ -101,10 +101,19 @@ public class AddTripActivity extends AppCompatActivity {
 
     private void addNewTrip() {
         DatabaseHelper db = new DatabaseHelper(AddTripActivity.this);
-        long result = db.addTrip(nameText, destinationText, dateOfTripText, requireAssessmentText, descriptionText);
+        long result = db.addTrip(
+                nameText,
+                destinationText,
+                dateOfTripText,
+                requireAssessmentText,
+                descriptionText
+        );
 
         if (result == -1) {
-            Toast.makeText(this, "Failed to create new trip", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Failed to create new trip",
+                    Toast.LENGTH_SHORT
+            ).show();
         } else {
             displayResult();
         }
@@ -131,11 +140,7 @@ public class AddTripActivity extends AppCompatActivity {
     public void checkValid() {
         // if the helper not empty then set isValid to false
         // flag for validate the input
-        boolean isValid = true;
-
-        if (nameInputLayout.getHelperText() != null) {
-            isValid = false;
-        }
+        boolean isValid = nameInputLayout.getHelperText() == null;
 
         if (destinationInputLayout.getHelperText() != null) {
             isValid = false;
@@ -157,7 +162,6 @@ public class AddTripActivity extends AppCompatActivity {
         nameInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -168,7 +172,6 @@ public class AddTripActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -187,7 +190,6 @@ public class AddTripActivity extends AppCompatActivity {
         destinationInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -198,7 +200,6 @@ public class AddTripActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -217,7 +218,6 @@ public class AddTripActivity extends AppCompatActivity {
         dateInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -228,7 +228,6 @@ public class AddTripActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -238,9 +237,12 @@ public class AddTripActivity extends AppCompatActivity {
 
         // https://www.w3schools.com/java/java_regex.asp regex document reference
         // Validate a format is dd/mm/yyyy
-        Pattern pattern = Pattern.compile("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"); // https://www.regextester.com/99555
+        // https://www.regextester.com/99555
+        String regex = "^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$";
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(dateOfTripText);
-        boolean matchFound = matcher.find(); // Check if match pattern
+        // Check if match pattern
+        boolean matchFound = matcher.find();
 
         if (dateOfTripText.isEmpty()) {
             return "Required*";
@@ -257,7 +259,6 @@ public class AddTripActivity extends AppCompatActivity {
         descriptionInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -268,7 +269,6 @@ public class AddTripActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }

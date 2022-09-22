@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.coursework.Trips.AddTripActivity;
+import com.example.coursework.databinding.FragmentTripBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class TripFragment extends Fragment {
     ArrayList<String> requireAssessmentArray;
     ArrayList<String> descriptionArray;
     CustomTripAdapter customTripAdapter;
+    private FragmentTripBinding binding;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -85,7 +87,8 @@ public class TripFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trip, container, false);
+        binding = FragmentTripBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -93,12 +96,12 @@ public class TripFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get reference recycler view
-        recyclerView = getView().findViewById(R.id.trip_recycler_view);
+        recyclerView = binding.tripRecyclerView;
 
-        emptyImageView = getView().findViewById(R.id.empty_trip_image_view);
-        noTripDataTxt = getView().findViewById(R.id.no_trip_data_txt);
+        emptyImageView = binding.emptyTripImageView;
+        noTripDataTxt = binding.noTripDataTxt;
 
-        addTripButton = getView().findViewById(R.id.add_trip_button);
+        addTripButton = binding.addTripButton;
         addTripButton.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), AddTripActivity.class);
             startActivity(intent);
@@ -128,6 +131,7 @@ public class TripFragment extends Fragment {
                 requireAssessmentArray,
                 descriptionArray
         );
+
         recyclerView.setAdapter(customTripAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

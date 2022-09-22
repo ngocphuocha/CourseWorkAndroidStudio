@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.coursework.databinding.FragmentSearchBinding;
 import com.google.android.material.textfield.TextInputEditText;
@@ -115,7 +114,6 @@ public class SearchFragment extends Fragment {
         tripSearchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -147,7 +145,6 @@ public class SearchFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
             }
-
         });
 
     }
