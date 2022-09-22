@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.coursework.databinding.ActivityMainBinding;
 
@@ -37,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.tripFragment:
+                case R.id.trip_fragment:
                     replaceFragment(new TripFragment());
                     break;
-                case R.id.searchFragment:
+                case R.id.search_fragment:
                     replaceFragment(new SearchFragment());
                     break;
-                case R.id.uploadFragment:
+                case R.id.update_fragment:
                     replaceFragment(new UploadFragment());
                     break;
             }
@@ -62,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == 1) {
             recreate();
         }
@@ -103,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_all_trip:
-                Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
-                confirmDeleteAllTripDialog();
+                confirmDeleteAllTripDialog(); // Delete all trip
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

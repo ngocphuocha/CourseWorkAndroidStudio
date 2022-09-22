@@ -8,97 +8,97 @@
     tools:context=".Trips.UpdateTripActivity">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nameContainerUpdate"
+        android:id="@+id/name_input_layout2"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:endIconMode="clear_text"
-        app:helperText=""
-        app:helperTextTextColor="@color/red"
         app:counterEnabled="true"
+        app:endIconMode="clear_text"
+        app:helperText="@string/required"
+        app:helperTextTextColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nameEditTextUpdate"
+            android:id="@+id/name_input2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/destinationContainerUpdate"
+        android:id="@+id/destination_input_layout2"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:helperText=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:counterEnabled="true"
         android:layout_marginTop="16dp"
+        app:counterEnabled="true"
         app:endIconMode="clear_text"
+        app:helperText="@string/required"
         app:helperTextTextColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameContainerUpdate">
+        app:layout_constraintTop_toBottomOf="@+id/name_input_layout2">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/destinationEditTextUpdate"
+            android:id="@+id/destination_input2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Destination" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dateOfTripContainerUpdate"
+        android:id="@+id/date_input_layout2"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:endIconMode="clear_text"
-        app:helperText=""
-        app:helperTextTextColor="@color/red"
         app:counterEnabled="true"
+        app:endIconMode="clear_text"
+        app:helperText="@string/required"
+        app:helperTextTextColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/destinationContainerUpdate">
+        app:layout_constraintTop_toBottomOf="@+id/destination_input_layout2">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dateOfTripEditTextUpdate"
+            android:id="@+id/date_input2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Date of trip(DD/MM/YY)" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/requireAssessmentTxtUpdate"
+        android:id="@+id/require_assessment_text2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Require risk assessment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateOfTripContainerUpdate" />
+        app:layout_constraintTop_toBottomOf="@+id/date_input_layout2" />
 
     <RadioGroup
-        android:id="@+id/require_assessment_group_update"
+        android:id="@+id/require_assessment_group2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requireAssessmentTxtUpdate">
+        app:layout_constraintTop_toBottomOf="@+id/require_assessment_text2">
 
         <RadioButton
-            android:id="@+id/radio_yes_button_update"
+            android:id="@+id/radio_yes_button2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Yes" />
 
         <RadioButton
-            android:id="@+id/radio_no_button_update"
+            android:id="@+id/radio_no_button2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -106,21 +106,21 @@
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/descriptionContainerUpdate"
+        android:id="@+id/description_input_layout2"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:counterEnabled="true"
-        app:helperText=""
         app:endIconMode="clear_text"
+        app:helperText="@string/required"
         app:helperTextTextColor="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/require_assessment_group_update">
+        app:layout_constraintTop_toBottomOf="@+id/require_assessment_group2">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/descriptionEditTextUpdate"
+            android:id="@+id/description_input2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Description" />
@@ -131,13 +131,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/purple_500"
         android:text="Update"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.733"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionContainerUpdate" />
+        app:layout_constraintTop_toBottomOf="@+id/description_input_layout2" />
 
     <Button
         android:id="@+id/expression_button_activity"
