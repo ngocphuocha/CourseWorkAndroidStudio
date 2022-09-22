@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.Locale;
 import java.util.jar.Attributes;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -51,8 +52,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "%s TEXT NOT NULL," +
                     "%s TEXT NOT NULL," +
                     "%s TEXT NOT NULL," +
-                    "FOREIGN KEY(TripId) REFERENCES Trips(" + ID_COLUMN + "));",
-            EXPENSES_TABLE, ID_COLUMN, TRIP_ID_COLUMN, TYPE_COLUMN, AMOUNT_COLUMN, TIME_OF_EXPENSE
+                    "FOREIGN KEY(%s) REFERENCES %s(%s));",
+            EXPENSES_TABLE, ID_COLUMN, TRIP_ID_COLUMN, TYPE_COLUMN, AMOUNT_COLUMN, TIME_OF_EXPENSE, TRIP_ID_COLUMN, TRIPS_TABLE, ID_COLUMN
     );
 
     private final Context context;
@@ -155,7 +156,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor searchTrip(String queryString) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
-        cursor = db.rawQuery("SELECT * FROM Trips WHERE Name LIKE '%" + queryString + "%'", null);
+
+        if (db != null) {
+            cursor = db.rawQuery("SELECT * FROM " + TRIPS_TABLE +
+                            " WHERE " + NAME_COLUMN + " LIKE ?" +
+                            " OR " + DESTINATION_COLUMN + " LIKE ?" +
+                            " OR " + DATE_OF_TRIP_COLUMN + " LIKE ?" +
+                            " OR " + REQUIRE_ASSESSMENT_COLUMN + " LIKE ?" +
+                            " OR " + DESCRIPTION_COLUMN + " LIKE ?;"
+                    , new String[]{"%" + queryString + "%", "%" + queryString + "%", "%" + queryString + "%", "%" + queryString + "%"});
+        }
+
         return cursor;
     }
 

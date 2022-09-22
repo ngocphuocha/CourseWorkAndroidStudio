@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coursework.CustomExpressionAdapter;
-import com.example.coursework.CustomTripAdapter;
 import com.example.coursework.DatabaseHelper;
 import com.example.coursework.R;
 import com.example.coursework.databinding.ActivityExpressionBinding;
@@ -25,9 +24,12 @@ public class ExpressionActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageView emptyImageView;
     TextView noTripDataTxt;
-    private DatabaseHelper db;
-    private ArrayList<String> id, type, amount, time;
     CustomExpressionAdapter customExpressionAdapter;
+    private DatabaseHelper db;
+    private ArrayList<String> id;
+    private ArrayList<String> type;
+    private ArrayList<String> amount;
+    private ArrayList<String> time;
     private ActivityExpressionBinding binding;
     private String tripId;
 
@@ -43,7 +45,8 @@ public class ExpressionActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) return;
-        tripId = extras.getString("tripId"); // Get trip id from UpdateTrip activity
+        // Get trip id from UpdateTrip activity
+        tripId = extras.getString("tripId");
 
         // Initial object
         // Get reference recycler view
@@ -61,17 +64,20 @@ public class ExpressionActivity extends AppCompatActivity {
 
         // Store data in array first for pass to the adapter
         storeDataInArrays();
-        customExpressionAdapter = new CustomExpressionAdapter(getApplicationContext(), id, type, amount, time);
+        customExpressionAdapter = new CustomExpressionAdapter(
+                getApplicationContext(),
+                id,
+                type,
+                amount,
+                time
+        );
         recyclerView.setAdapter(customExpressionAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        binding.addExpressionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AddExpressionActivity.class);
-                intent.putExtra("tripId", tripId);
-                startActivity(intent);
-            }
+        binding.addExpressionButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), AddExpressionActivity.class);
+            intent.putExtra("tripId", tripId);
+            startActivity(intent);
         });
 
     }
@@ -83,7 +89,10 @@ public class ExpressionActivity extends AppCompatActivity {
         if (cursor.getCount() == 0) {
             emptyImageView.setVisibility(View.VISIBLE);
             noTripDataTxt.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(), "No data.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    "No data.",
+                    Toast.LENGTH_SHORT
+            ).show();
         } else {
             while (cursor.moveToNext()) {
                 id.add(cursor.getString(0));

@@ -16,18 +16,24 @@ import java.util.ArrayList;
 
 public class CustomExpressionAdapter extends RecyclerView.Adapter<CustomExpressionAdapter.MyViewHolder> {
     private final Context context;
-    private final ArrayList id;
-    private final ArrayList type;
-    private final ArrayList amount;
-    private final ArrayList time;
+    private final ArrayList ids;
+    private final ArrayList types;
+    private final ArrayList amounts;
+    private final ArrayList times;
     private Animation translateAnimation;
 
-    public CustomExpressionAdapter(Context context, ArrayList id, ArrayList type, ArrayList amount, ArrayList time) {
+    public CustomExpressionAdapter(
+            Context context,
+            ArrayList ids,
+            ArrayList types,
+            ArrayList amounts,
+            ArrayList times
+    ) {
         this.context = context;
-        this.id = id;
-        this.type = type;
-        this.amount = amount;
-        this.time = time;
+        this.ids = ids;
+        this.types = types;
+        this.amounts = amounts;
+        this.times = times;
     }
 
     @NonNull
@@ -39,28 +45,30 @@ public class CustomExpressionAdapter extends RecyclerView.Adapter<CustomExpressi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.type_txt.setText(String.valueOf(type.get(position)));
-        holder.amount_txt.setText(String.valueOf(amount.get(position)));
-        holder.time_txt.setText(String.valueOf(time.get(position)));
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        holder.typeText.setText(String.valueOf(types.get(position)));
+        holder.amountText.setText(String.valueOf(amounts.get(position)));
+        holder.timeText.setText(String.valueOf(times.get(position)));
     }
 
     @Override
     public int getItemCount() {
-        return id.size();
+        return ids.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView type_txt, amount_txt, time_txt;
+        TextView typeText, amountText, timeText;
         LinearLayout expressionLinearLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            type_txt = itemView.findViewById(R.id.expressionTypeTxt);
-            amount_txt = itemView.findViewById(R.id.amountExpressionTxt);
-            time_txt = itemView.findViewById(R.id.timeExpressionTxt);
+            typeText = itemView.findViewById(R.id.expressionTypeTxt);
+            amountText = itemView.findViewById(R.id.amountExpressionTxt);
+            timeText = itemView.findViewById(R.id.timeExpressionTxt);
+
             // Get reference linear layout
             expressionLinearLayout = itemView.findViewById(R.id.expresonLinearLayout);
+
             // Animation recycle view
             translateAnimation = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
             expressionLinearLayout.setAnimation(translateAnimation);

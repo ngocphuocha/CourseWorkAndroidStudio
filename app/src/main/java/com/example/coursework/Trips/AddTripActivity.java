@@ -3,16 +3,18 @@ package com.example.coursework.Trips;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.coursework.DatabaseHelper;
-import com.example.coursework.R;
+import com.example.coursework.MainActivity;
+import com.example.coursework.databinding.ActivityAddTripBinding;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -20,86 +22,98 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddTripActivity extends AppCompatActivity {
+    ActivityAddTripBinding binding;
 
-    TextInputLayout name_container, destination_container, date_of_trip_container, description_container;
-    TextInputEditText name_input, destination_input, date_of_trip_input, description_input;
-    String name_text, destination_txt, date_of_trip_txt, require_assessment_txt, description_txt;
-    RadioGroup require_assessment_group;
-    RadioButton require_input_radio;
-    Button save_trip_button;
+    private Button saveTripButton;
+
+    private String nameText;
+    private String destinationText;
+    private String dateOfTripText;
+    private String requireAssessmentText;
+    private String descriptionText;
+
+    private TextInputLayout nameInputLayout;
+    private TextInputLayout destinationInputLayout;
+    private TextInputLayout dateInputLayout;
+    private TextInputLayout descriptionInputLayout;
+
+    private TextInputEditText nameInput;
+    private TextInputEditText destinationInput;
+    private TextInputEditText dateInput;
+    private TextInputEditText descriptionInput;
+
+    private RadioGroup requireAssessmentGroup;
+
+    private RadioButton requireInputRadio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_trip);
+        binding = ActivityAddTripBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // Get require assessment input radio text
-        require_assessment_group = findViewById(R.id.require_assessment_group);
-        require_input_radio = (RadioButton) findViewById(require_assessment_group.getCheckedRadioButtonId());  // Get default radio button input
 
-        // Get new radio button input if user change input
-        require_assessment_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                require_input_radio = (RadioButton) findViewById(require_assessment_group.getCheckedRadioButtonId());
-            }
-        });
         // Get reference Text input layout
-        name_container = findViewById(R.id.nameContainer);
-        destination_container = findViewById(R.id.destinationContainer);
-        date_of_trip_container = findViewById(R.id.dateOfTripContainer);
-        date_of_trip_container = findViewById(R.id.dateOfTripContainer);
-        description_container = findViewById(R.id.descriptionContainer);
+        nameInputLayout = binding.nameInputLayout;
+        destinationInputLayout = binding.destinationInputLayout;
+        dateInputLayout = binding.dateInputLayout;
+        descriptionInputLayout = binding.descriptionInputLayout;
+
+        nameInput = binding.nameInput;
+        destinationInput = binding.destinationInput;
+        dateInput = binding.dateInput;
+        descriptionInput = binding.descriptionInput;
 
         // Reference save trip button
-        save_trip_button = findViewById(R.id.save_trip_button);
-        save_trip_button.setOnClickListener(new View.OnClickListener() {
+        saveTripButton = binding.saveTripButton;
+
+        // Check valid on focus input text first
+        nameFocusListener();
+        destinationFocusListener();
+        dateOfTripFocusListener();
+        descriptionFocusListener();
+
+        // Get default radio button input
+        requireAssessmentGroup = binding.requireAssessmentGroup;
+        requireInputRadio = binding.getRoot().findViewById(
+                requireAssessmentGroup.getCheckedRadioButtonId()
+        );
+
+        requireAssessmentText = requireInputRadio.getText().toString();
+
+        // Get new radio button input if user change input
+        requireAssessmentGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                //Get input first
-                getInputs();
-
-                // Validate the input from user
-                boolean isValid = checkValidateInputs();
-
-                // Add a new trip if input is valid
-                if (!isValid) {
-                    Toast.makeText(AddTripActivity.this, "Please fill full the input again.", Toast.LENGTH_SHORT).show();
-                } else {
-                    addNewTrip();
-                }
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                requireInputRadio = binding.getRoot().findViewById(
+                        requireAssessmentGroup.getCheckedRadioButtonId()
+                );
+                requireAssessmentText = requireInputRadio.getText().toString();
             }
         });
-    }
 
-    // Get input from user
-    private void getInputs() {
-        // Get name input text
-        name_input = findViewById(R.id.nameEditText);
-        name_text = name_input.getText().toString().trim();
-
-        // Get destination input text
-        destination_input = findViewById(R.id.destinationEditText);
-        destination_txt = destination_input.getText().toString().trim();
-
-        // Get date of the trim input text
-        date_of_trip_input = findViewById(R.id.dateOfTripEditText);
-        date_of_trip_txt = date_of_trip_input.getText().toString().trim();
-
-        // Get require assessment text value
-        require_assessment_txt = require_input_radio.getText().toString();
-
-        // Get destination input text
-        description_input = findViewById(R.id.descriptionEditText);
-        description_txt = description_input.getText().toString().trim();
+        saveTripButton.setEnabled(false); // false by default
+        saveTripButton.setOnClickListener(v -> {
+            // Add a new trip if input is valid
+            addNewTrip();
+        });
     }
 
     private void addNewTrip() {
         DatabaseHelper db = new DatabaseHelper(AddTripActivity.this);
-        long result = db.addTrip(name_text, destination_txt, date_of_trip_txt, require_assessment_txt, description_txt);
+        long result = db.addTrip(
+                nameText,
+                destinationText,
+                dateOfTripText,
+                requireAssessmentText,
+                descriptionText
+        );
 
         if (result == -1) {
-            Toast.makeText(this, "Failed to create new trip", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Failed to create new trip",
+                    Toast.LENGTH_SHORT
+            ).show();
         } else {
             displayResult();
         }
@@ -107,67 +121,165 @@ public class AddTripActivity extends AppCompatActivity {
 
     private void displayResult() {
         new AlertDialog.Builder(this).setTitle("Add new trip successfully.")
-                .setMessage("Name: " + name_text + "\n" +
-                        "Destination: " + description_txt + "\n" +
-                        "Date of the trip: " + date_of_trip_txt + "\n" +
-                        "Risk assessment: " + require_assessment_txt + "\n" +
-                        "Description: " + description_txt
+                .setMessage("Name: " + nameText + "\n" +
+                        "Destination: " + destinationText + "\n" +
+                        "Date of the trip: " + dateOfTripText + "\n" +
+                        "Risk assessment: " + requireAssessmentText + "\n" +
+                        "Description: " + descriptionText
                 )
-                .setNeutralButton("Close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO: should clear input
-                    }
+                .setNeutralButton("Close", (dialog, which) -> {
+                    Intent intent = new Intent(
+                            AddTripActivity.this,
+                            MainActivity.class
+                    );
+                    startActivity(intent);
                 })
                 .show();
     }
 
-    private boolean checkValidateInputs() {
-        boolean isValid = true; // Flag status for validate
+    public void checkValid() {
+        // if the helper not empty then set isValid to false
+        // flag for validate the input
+        boolean isValid = nameInputLayout.getHelperText() == null;
 
-        // Validate name input
-        if (name_text.isEmpty()) {
-            name_container.setHelperText("Required");
+        if (destinationInputLayout.getHelperText() != null) {
             isValid = false;
-        } else {
-            name_container.setHelperText("");
         }
 
-        // Validate destination input
-        if (destination_txt.isEmpty()) {
-            destination_container.setHelperText("Required");
+        if (dateInputLayout.getHelperText() != null) {
             isValid = false;
-        } else {
-            destination_container.setHelperText("");
         }
 
+        if (descriptionInputLayout.getHelperText() != null) {
+            isValid = false;
+        }
+
+        //Set status enable base on isValid status
+        saveTripButton.setEnabled(isValid);
+    }
+
+    private void nameFocusListener() {
+        nameInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nameInputLayout.setHelperText(validName());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private String validName() {
+        nameText = nameInput.getText().toString().trim();
+
+        if (nameText.isEmpty()) {
+            return "Required*";
+        }
+
+        return null;
+    }
+
+    private void destinationFocusListener() {
+        destinationInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                destinationInputLayout.setHelperText(validDestination());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private String validDestination() {
+        destinationText = destinationInput.getText().toString().trim();
+
+        if (destinationText.isEmpty()) {
+            return "Required*";
+        }
+
+        return null;
+    }
+
+    private void dateOfTripFocusListener() {
+        dateInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dateInputLayout.setHelperText(validDateOfTrip());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private String validDateOfTrip() {
+        dateOfTripText = dateInput.getText().toString().trim();
+
+        // https://www.w3schools.com/java/java_regex.asp regex document reference
         // Validate a format is dd/mm/yyyy
-        Pattern pattern = Pattern.compile("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"); // https://www.regextester.com/99555
-        Matcher matcher = pattern.matcher(date_of_trip_txt);
+        // https://www.regextester.com/99555
+        String regex = "^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(dateOfTripText);
+        // Check if match pattern
         boolean matchFound = matcher.find();
 
+        if (dateOfTripText.isEmpty()) {
+            return "Required*";
+        }
+
         if (!matchFound) {
-            date_of_trip_container.setHelperText("Date is invalid!");
-            isValid = false;
-        } else {
-            date_of_trip_container.setHelperText("");
+            return "Invalid format";
         }
 
-        // Validate date is empty
-        if (date_of_trip_txt.isEmpty()) {
-            date_of_trip_container.setHelperText("Required");
-            isValid = false;
-        } else {
-            date_of_trip_container.setHelperText("");
+        return null;
+    }
+
+    private void descriptionFocusListener() {
+        descriptionInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                descriptionInputLayout.setHelperText(validDescription());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private String validDescription() {
+        descriptionText = descriptionInput.getText().toString().trim();
+
+        if (descriptionText.isEmpty()) {
+            return "Required*";
         }
 
-        // Validate description text
-        if (description_txt.isEmpty()) {
-            description_container.setHelperText("Required");
-        } else {
-            date_of_trip_container.setHelperText("");
-        }
-
-        return isValid;
+        return null;
     }
 }
