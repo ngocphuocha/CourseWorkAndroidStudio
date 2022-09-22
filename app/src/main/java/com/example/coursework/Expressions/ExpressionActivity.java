@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coursework.CustomExpressionAdapter;
-import com.example.coursework.CustomTripAdapter;
 import com.example.coursework.DatabaseHelper;
 import com.example.coursework.R;
 import com.example.coursework.databinding.ActivityExpressionBinding;

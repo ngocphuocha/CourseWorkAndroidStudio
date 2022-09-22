@@ -19,8 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.coursework.databinding.FragmentSearchBinding;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,17 +30,23 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
-    private FragmentSearchBinding binding;
-    ImageView emptyImageView;
-    TextView noTripDataTxt;
-    DatabaseHelper db;
-    ArrayList<String> idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray, descriptionArray;
-    CustomTripAdapter customTripAdapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    ImageView emptyImageView;
+    TextView noTripDataTxt;
+    ArrayList<String> idArray;
+    ArrayList<String> nameArray;
+    ArrayList<String> destinationArray;
+    ArrayList<String> dateOfTripArray;
+    ArrayList<String> requireAssessmentArray;
+    ArrayList<String> descriptionArray;
+    CustomTripAdapter customTripAdapter;
+    DatabaseHelper db;
 
+    TextInputEditText tripSearchInput;
+    private FragmentSearchBinding binding;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -78,8 +86,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -91,6 +98,7 @@ public class SearchFragment extends Fragment {
 
         emptyImageView = binding.emptyTripImageView2;
         noTripDataTxt = binding.noTripDataTxt2;
+        tripSearchInput = binding.tripSearchInput;
 
         // Initial object
         db = new DatabaseHelper(getContext());
@@ -101,12 +109,10 @@ public class SearchFragment extends Fragment {
         requireAssessmentArray = new ArrayList<>();
         descriptionArray = new ArrayList<>();
 
+        // Check if result of searching is empty then show no data icon
+        showIconNoData();
 
-        customTripAdapter = new CustomTripAdapter(getContext(), idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray, descriptionArray);
-        recyclerView.setAdapter(customTripAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        binding.tripSearchInput.addTextChangedListener(new TextWatcher() {
+        tripSearchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -114,9 +120,28 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchTrips(tripSearchInput.getText().toString().trim().toLowerCase(Locale.ROOT));
+                if (tripSearchInput.getText().toString().trim().isEmpty()) {
+                    idArray.clear();
+                    nameArray.clear();
+                    descriptionArray.clear();
+                    dateOfTripArray.clear();
+                    requireAssessmentArray.clear();
+                    descriptionArray.clear();
+                }
 
-                searchTrips(binding.tripSearchInput.getText().toString());
-//                customTripAdapter.notifyItemChanged(idArray.size());
+                customTripAdapter = new CustomTripAdapter(
+                        getContext(),
+                        idArray,
+                        nameArray,
+                        destinationArray,
+                        dateOfTripArray,
+                        requireAssessmentArray,
+                        descriptionArray
+                );
+                recyclerView.setAdapter(customTripAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                showIconNoData();
             }
 
             @Override
@@ -134,12 +159,12 @@ public class SearchFragment extends Fragment {
         dateOfTripArray.clear();
         requireAssessmentArray.clear();
         descriptionArray.clear();
+
         Cursor cursor = db.searchTrip(query);
 
         if (cursor.getCount() == 0) {
             emptyImageView.setVisibility(View.VISIBLE);
             noTripDataTxt.setVisibility(View.VISIBLE);
-            Toast.makeText(getContext(), "No data.", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
                 idArray.add(cursor.getString(0));
@@ -151,6 +176,13 @@ public class SearchFragment extends Fragment {
             }
             emptyImageView.setVisibility(View.GONE);
             noTripDataTxt.setVisibility(View.GONE);
+        }
+    }
+
+    private void showIconNoData() {
+        if (idArray.size() == 0) {
+            emptyImageView.setVisibility(View.VISIBLE);
+            noTripDataTxt.setVisibility(View.VISIBLE);
         }
     }
 }

@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.coursework.Trips.AddTripActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,20 +27,22 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class TripFragment extends Fragment {
-    RecyclerView recyclerView;
-    ImageView emptyImageView;
-    TextView noTripDataTxt;
-    FloatingActionButton add_trip_button;
-
-    DatabaseHelper db;
-    ArrayList<String> idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray, descriptionArray;
-    CustomTripAdapter customTripAdapter;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    RecyclerView recyclerView;
+    ImageView emptyImageView;
+    TextView noTripDataTxt;
+    FloatingActionButton addTripButton;
+    DatabaseHelper db;
+    ArrayList<String> idArray;
+    ArrayList<String> nameArray;
+    ArrayList<String> destinationArray;
+    ArrayList<String> dateOfTripArray;
+    ArrayList<String> requireAssessmentArray;
+    ArrayList<String> descriptionArray;
+    CustomTripAdapter customTripAdapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -92,18 +93,15 @@ public class TripFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get reference recycler view
-        recyclerView = getView().findViewById(R.id.tripRecyclerView);
+        recyclerView = getView().findViewById(R.id.trip_recycler_view);
 
-        emptyImageView = getView().findViewById(R.id.emptyTripImageView);
-        noTripDataTxt = getView().findViewById(R.id.noTripDataTxt);
+        emptyImageView = getView().findViewById(R.id.empty_trip_image_view);
+        noTripDataTxt = getView().findViewById(R.id.no_trip_data_txt);
 
-        add_trip_button = getView().findViewById(R.id.add_trip_button);
-        add_trip_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AddTripActivity.class);
-                startActivity(intent);
-            }
+        addTripButton = getView().findViewById(R.id.add_trip_button);
+        addTripButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), AddTripActivity.class);
+            startActivity(intent);
         });
 
         // Set title of bar
@@ -121,7 +119,15 @@ public class TripFragment extends Fragment {
         // Store data in array first for pass to the custom trip adapter
         storeTripsDataInArrays();
 
-        customTripAdapter = new CustomTripAdapter(getContext(), idArray, nameArray, destinationArray, dateOfTripArray, requireAssessmentArray, descriptionArray);
+        customTripAdapter = new CustomTripAdapter(
+                getContext(),
+                idArray,
+                nameArray,
+                destinationArray,
+                dateOfTripArray,
+                requireAssessmentArray,
+                descriptionArray
+        );
         recyclerView.setAdapter(customTripAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -131,8 +137,8 @@ public class TripFragment extends Fragment {
 
         if (cursor.getCount() == 0) {
             emptyImageView.setVisibility(View.VISIBLE);
+            emptyImageView.setVisibility(View.VISIBLE);
             noTripDataTxt.setVisibility(View.VISIBLE);
-            Toast.makeText(getContext(), "No data.", Toast.LENGTH_SHORT).show();
         } else {
             while (cursor.moveToNext()) {
                 idArray.add(cursor.getString(0));

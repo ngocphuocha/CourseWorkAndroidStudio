@@ -58,11 +58,8 @@ public class AddExpressionActivity extends AppCompatActivity {
         timeExpressionFocusListener();
 
         // Onclick add expression button
-        binding.addExpressionItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addExpressions();  // add new expression
-            }
+        binding.addExpressionItem.setOnClickListener(v -> {
+            addExpressions();  // add new expression
         });
     }
 
@@ -87,7 +84,6 @@ public class AddExpressionActivity extends AppCompatActivity {
 
 
     }
-
 
     private boolean checkIsValid() {
         amountText = binding.amountInput.getText().toString();

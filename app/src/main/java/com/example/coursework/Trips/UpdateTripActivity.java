@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -20,15 +21,36 @@ import com.example.coursework.Expressions.ExpressionActivity;
 import com.example.coursework.MainActivity;
 import com.example.coursework.R;
 import com.example.coursework.databinding.ActivityUpdateTripBinding;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UpdateTripActivity extends AppCompatActivity {
     private ActivityUpdateTripBinding binding;
-    private RadioButton require_input_radio;
-    private String id, nameText, destinationText, dateOfTripText, requireAssessmentText, descriptionText;
-    private boolean isValid = true;
+
+    private RadioButton requireInputRadio;
+
+    private String id;
+    private String nameText;
+    private String destinationText;
+    private String dateOfTripText;
+    private String requireAssessmentText;
+    private String descriptionText;
+
+    private TextInputLayout nameInputLayout;
+    private TextInputLayout destinationInputLayout;
+    private TextInputLayout dateInputLayout;
+    private TextInputLayout descriptionInputLayout;
+
+    private TextInputEditText nameInput;
+    private TextInputEditText destinationInput;
+    private TextInputEditText dateInput;
+    private TextInputEditText descriptionInput;
+
+    private RadioGroup requireAssessmentGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,152 +58,210 @@ public class UpdateTripActivity extends AppCompatActivity {
         binding = ActivityUpdateTripBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Check valid on focus input text
+        // Set reference
+        nameInputLayout = binding.nameInputLayout2;
+        destinationInputLayout = binding.destinationInputLayout2;
+        dateInputLayout = binding.dateInputLayout2;
+        descriptionInputLayout = binding.descriptionInputLayout2;
+
+        nameInput = binding.nameInput2;
+        destinationInput = binding.destinationInput2;
+        dateInput = binding.dateInput2;
+        descriptionInput = binding.descriptionInput2;
+
+        requireAssessmentGroup = binding.requireAssessmentGroup2;
+
+        // Check valid on focus input text first
         nameFocusListener();
         destinationFocusListener();
         dateOfTripFocusListener();
         descriptionFocusListener();
 
-        // First we call this
+        // Get the intent data and set the input
         getAndSetIntentData();
+
         // Set actionbar after getAndSetIntentData method
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setTitle(nameText);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(nameText);
         }
 
         // Get require assessment input radio text
-        binding.requireAssessmentGroupUpdate.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                require_input_radio = binding.getRoot().findViewById(binding.requireAssessmentGroupUpdate.getCheckedRadioButtonId());
-                requireAssessmentText = require_input_radio.getText().toString();
-            }
+        requireAssessmentGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            requireInputRadio = binding.getRoot().findViewById(
+                    requireAssessmentGroup.getCheckedRadioButtonId()
+            );
+            requireAssessmentText = requireInputRadio.getText().toString();
         });
 
+        // On click update button and update trip data
+        binding.updateTripButton.setOnClickListener(v -> submitForm());
 
-        // On click update button
-        binding.updateTripButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitForm();
-            }
-        });
-
-        // Expression activity
-        binding.expressionButtonActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ExpressionActivity.class);
-                intent.putExtra("tripId", id);
-                startActivity(intent);
-            }
+        // Go to expression activity
+        binding.expressionButtonActivity.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ExpressionActivity.class);
+            intent.putExtra("tripId", id);
+            startActivity(intent);
         });
     }
 
     private void submitForm() {
-        if (!checkValid()) {
-            Toast.makeText(this, "Please fulfilled again!", Toast.LENGTH_SHORT).show();
-        } else {
-            DatabaseHelper db = new DatabaseHelper(UpdateTripActivity.this);
-            db.updateTrip(id, nameText, destinationText, dateOfTripText, requireAssessmentText, descriptionText);
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivityForResult(intent, 1);
-        }
+        DatabaseHelper db = new DatabaseHelper(UpdateTripActivity.this);
+        db.updateTrip(
+                id,
+                nameText,
+                destinationText,
+                dateOfTripText,
+                requireAssessmentText,
+                descriptionText
+        );
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 
     private void getAndSetIntentData() {
-        if (getIntent().hasExtra("trip_id")
-                && getIntent().hasExtra("trip_name")
-                && getIntent().hasExtra("trip_destination")
-                && getIntent().hasExtra("trip_date")
-                && getIntent().hasExtra("trip_requireAssessment")
-                && getIntent().hasExtra("trip_description")) {
-            // Getting data from intent and setting data for edit text
-            id = getIntent().getStringExtra("trip_id");
-            binding.nameEditTextUpdate.setText(getIntent().getStringExtra("trip_name"));
-            binding.destinationEditTextUpdate.setText(getIntent().getStringExtra("trip_destination"));
-            binding.dateOfTripEditTextUpdate.setText(getIntent().getStringExtra("trip_date"));
-            binding.descriptionEditTextUpdate.setText(getIntent().getStringExtra("trip_description"));
+        Bundle extras = getIntent().getExtras();
 
-            Bundle extras = getIntent().getExtras();
-
-            // Set textValue
-            nameText = extras.getString("trip_name");
-            destinationText = extras.getString("trip_destination");
-            dateOfTripText = extras.getString("trip_date");
-            descriptionText = extras.getString("trip_description");
-
-            // get and set radio
-            requireAssessmentText = extras.getString("trip_requireAssessment");
-
-            if (requireAssessmentText.equals("Yes")) {
-                binding.requireAssessmentGroupUpdate.check(R.id.radio_yes_button_update);
-            } else {
-                binding.requireAssessmentGroupUpdate.check(R.id.radio_no_button_update);
-            }
-
-            require_input_radio = binding.getRoot().findViewById(binding.requireAssessmentGroupUpdate.getCheckedRadioButtonId());
-            requireAssessmentText = require_input_radio.getText().toString();
-        } else {
-            Toast.makeText(this, "No data intent.", Toast.LENGTH_SHORT).show();
+        if (extras == null) {
+            Toast.makeText(this, "No intent data.", Toast.LENGTH_SHORT).show();
+            return;
         }
+        // Getting data from intent and setting data for edit text
+        nameInput.setText(extras.getString("tripName"));
+        destinationInput.setText(extras.getString("tripDestination"));
+        dateInput.setText(extras.getString("tripDate"));
+        descriptionInput.setText(extras.getString("tripDescription"));
+
+        // Set to input value
+        id = extras.getString("tripId");
+        nameText = extras.getString("tripName");
+        destinationText = extras.getString("tripDestination");
+        dateOfTripText = extras.getString("tripDate");
+        descriptionText = extras.getString("tripDescription");
+
+        // get and set radio
+        requireAssessmentText = extras.getString("tripRequireAssessment");
+
+        if (requireAssessmentText.equals("Yes")) {
+            binding.requireAssessmentGroup2.check(R.id.radio_yes_button2);
+        } else {
+            binding.requireAssessmentGroup2.check(R.id.radio_no_button2);
+        }
+
+        requireInputRadio = binding.getRoot().findViewById(
+                binding.requireAssessmentGroup2.getCheckedRadioButtonId()
+        );
+
+        requireAssessmentText = requireInputRadio.getText().toString();
+    }
+
+    public void checkValid() {
+        // if the helper not empty then set isValid to false
+        // flag for validate the input
+        boolean isValid = true;
+
+        if (nameInputLayout.getHelperText() != null) {
+            isValid = false;
+        }
+
+        if (destinationInputLayout.getHelperText() != null) {
+            isValid = false;
+        }
+
+        if (dateInputLayout.getHelperText() != null) {
+            isValid = false;
+        }
+
+        if (descriptionInputLayout.getHelperText() != null) {
+            isValid = false;
+        }
+
+        //Set status enable base on isValid status
+        binding.updateTripButton.setEnabled(isValid);
     }
 
     private void nameFocusListener() {
-        binding.nameEditTextUpdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        nameInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    binding.nameContainerUpdate.setHelperText(validName());
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nameInputLayout.setHelperText(validName());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
 
     private String validName() {
-        nameText = binding.nameEditTextUpdate.getText().toString();
+        nameText = nameInput.getText().toString().trim();
 
         if (nameText.isEmpty()) {
             return "Required*";
         }
-        return "";
+
+        return null;
     }
 
     private void destinationFocusListener() {
-        binding.destinationEditTextUpdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        destinationInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    binding.destinationContainerUpdate.setHelperText(validDestination());
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                destinationInputLayout.setHelperText(validDestination());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
 
     private String validDestination() {
-        destinationText = binding.destinationEditTextUpdate.getText().toString();
+        destinationText = destinationInput.getText().toString().trim();
 
         if (destinationText.isEmpty()) {
             return "Required*";
         }
 
-        return "";
+        return null;
     }
 
     private void dateOfTripFocusListener() {
-        binding.dateOfTripEditTextUpdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        dateInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    binding.dateOfTripContainerUpdate.setHelperText(validDateOfTrip());
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dateInputLayout.setHelperText(validDateOfTrip());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
 
     private String validDateOfTrip() {
-        dateOfTripText = binding.dateOfTripEditTextUpdate.getText().toString();
+        dateOfTripText = dateInput.getText().toString().trim();
 
         // https://www.w3schools.com/java/java_regex.asp regex document reference
         // Validate a format is dd/mm/yyyy
@@ -191,63 +271,45 @@ public class UpdateTripActivity extends AppCompatActivity {
 
         if (dateOfTripText.isEmpty()) {
             return "Required*";
-        } else if (!matchFound) {
-            return "Invalid format";
-        } else {
-            return "";
         }
+
+        if (!matchFound) {
+            return "Invalid format";
+        }
+
+        return null;
     }
 
     private void descriptionFocusListener() {
-        binding.descriptionEditTextUpdate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        descriptionInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    binding.descriptionContainerUpdate.setHelperText(validDescription());
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                descriptionInputLayout.setHelperText(validDescription());
+                checkValid();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
 
     private String validDescription() {
-        descriptionText = binding.descriptionEditTextUpdate.getText().toString();
+        descriptionText = descriptionInput.getText().toString().trim();
 
         if (descriptionText.isEmpty()) {
             return "Required*";
         }
 
-        return "";
+        return null;
     }
 
-    public boolean checkValid() {
-        nameText = binding.nameEditTextUpdate.getText().toString();
-        if (nameText.isEmpty()) {
-            isValid = false;
-        }
-
-        destinationText = binding.destinationEditTextUpdate.getText().toString();
-        if (destinationText.isEmpty()) {
-            isValid = false;
-        }
-
-        dateOfTripText = binding.dateOfTripEditTextUpdate.getText().toString();
-        Pattern pattern = Pattern.compile("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"); // https://www.regextester.com/99555
-        Matcher matcher = pattern.matcher(dateOfTripText);
-        boolean matchFound = matcher.find(); // Check if match pattern
-        if (dateOfTripText.isEmpty()) {
-            isValid = false;
-        }
-        if (!matchFound) {
-            isValid = true;
-        }
-
-        descriptionText = binding.descriptionEditTextUpdate.getText().toString();
-        if (descriptionText.isEmpty()) {
-            isValid = false;
-        }
-
-        return isValid;
-    }
 
     // Delete a trip
     private void confirmDeleteDialog() {
@@ -260,7 +322,7 @@ public class UpdateTripActivity extends AppCompatActivity {
                 DatabaseHelper db = new DatabaseHelper(UpdateTripActivity.this);
                 db.deleteTripRow(id);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(intent, 1);
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
