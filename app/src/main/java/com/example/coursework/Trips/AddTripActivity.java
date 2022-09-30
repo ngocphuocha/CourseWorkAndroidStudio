@@ -140,7 +140,11 @@ public class AddTripActivity extends AppCompatActivity {
     public void checkValid() {
         // if the helper not empty then set isValid to false
         // flag for validate the input
-        boolean isValid = nameInputLayout.getHelperText() == null;
+        boolean isValid = true;
+
+        if(nameInputLayout.getHelperText() == null) {
+            isValid = false;
+        }
 
         if (destinationInputLayout.getHelperText() != null) {
             isValid = false;
