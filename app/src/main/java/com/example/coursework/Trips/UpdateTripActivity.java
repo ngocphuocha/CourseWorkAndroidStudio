@@ -119,6 +119,7 @@ public class UpdateTripActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Get the data and put to the form
     private void getAndSetIntentData() {
         Bundle extras = getIntent().getExtras();
 
