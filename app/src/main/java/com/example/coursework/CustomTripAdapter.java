@@ -70,12 +70,22 @@ public class CustomTripAdapter extends RecyclerView.Adapter<CustomTripAdapter.My
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UpdateTripActivity.class);
+
                 intent.putExtra("tripId", String.valueOf(tripId.get(position)));
                 intent.putExtra("tripName", String.valueOf(tripName.get(position)));
-                intent.putExtra("tripDestination", String.valueOf(tripDestination.get(position)));
-                intent.putExtra("tripDate", String.valueOf(tripDateOfTrip.get(position)));
-                intent.putExtra("tripRequireAssessment", String.valueOf(tripRequireAssessment.get(position)));
-                intent.putExtra("tripDescription", String.valueOf(tripDescription.get(position)));
+                intent.putExtra("tripDestination",
+                        String.valueOf(tripDestination.get(position))
+                );
+                intent.putExtra("tripDate",
+                        String.valueOf(tripDateOfTrip.get(position))
+                );
+                intent.putExtra("tripRequireAssessment",
+                        String.valueOf(tripRequireAssessment.get(position))
+                );
+                intent.putExtra("tripDescription",
+                        String.valueOf(tripDescription.get(position))
+                );
+
                 context.startActivity(intent);
             }
         });

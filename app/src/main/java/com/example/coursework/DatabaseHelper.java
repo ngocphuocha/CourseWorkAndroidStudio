@@ -84,7 +84,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long addTrip(String name, String destination, String dateOfTrip, String requireRisk, String description) {
+    public long addTrip(String name,
+                        String destination,
+                        String dateOfTrip,
+                        String requireRisk,
+                        String description) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -111,7 +115,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void updateTrip(String id, String name, String destination, String date, String requireAssessment, String description) {
+    public void updateTrip(String id,
+                           String name,
+                           String destination,
+                           String date,
+                           String requireAssessment,
+                           String description) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -164,7 +173,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             " OR " + DATE_OF_TRIP_COLUMN + " LIKE ?" +
                             " OR " + REQUIRE_ASSESSMENT_COLUMN + " LIKE ?" +
                             " OR " + DESCRIPTION_COLUMN + " LIKE ?;"
-                    , new String[]{"%" + queryString + "%", "%" + queryString + "%", "%" + queryString + "%", "%" + queryString + "%"});
+                    , new String[]{
+                            "%" + queryString + "%",
+                            "%" + queryString + "%",
+                            "%" + queryString + "%",
+                            "%" + queryString + "%"}
+            );
         }
 
         return cursor;
